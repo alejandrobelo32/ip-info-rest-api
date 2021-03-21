@@ -4,12 +4,14 @@
     <title>Ip info</title>
   </head>
   <body>
+    <div id="div1"></div>
     <script src="http://code.jquery.com/jquery-1.12.0.min.js"></script>
     <script>
       $(document).ready(function () {
         // Get
-        $.get("http://127.0.0.1/slim_app/public/ip/get-info/57.76.127.253", function (r) {
+        $.get("ip/get-info/57.76.127.253", function (r) {
             console.log(r);
+            $("#div1").text(JSON.stringify(r));
           },"json"
         );
       });

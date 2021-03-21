@@ -54,6 +54,26 @@ $app->group('/ip/', function () {
 
     $rqm -> Insert($countryCode3, $arrInfo["IP"]);
 
+    $reqHistInterval = $rqm->GetHistoryIntervalByHour(24)->result;
+
+    if(!empty($reqHistInterval)){
+      
+      if(count($reqHistInterval)>1){
+        $arrInfo["Lugar mas cercano"] = $reqHistInterval[0]->name;
+        $arrInfo["Lugar mas lejano"] = $reqHistInterval[count($reqHistInterval)-1]->name;
+      }else{
+        $arrInfo["Unico lugar"] = $reqHistInterval[0]->name;
+      }
+
+      $acumKm = 0;
+      $totalReq = 0;
+      foreach ($reqHistInterval as $val) {
+        $acumKm += $val->quantity * $val->distance_to_bsas;
+        $totalReq += $val ->quantity; 
+      }
+      $arrInfo["Promedio de distancia recorrida"] = number_format($acumKm/$totalReq, 2, '.', '') ." Km/s";
+    }
+
     //$reqIP = $req->getAttribute('ip_address');
 
     return $res
